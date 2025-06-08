@@ -3,7 +3,7 @@ title: "final"
 format: html
 ---
 
-[GitHub Repository] (https://github.com/izzy-chang/ENVS-193DS_spring-2025_final)
+\[GitHub Repository\] (https://github.com/izzy-chang/ENVS-193DS_spring-2025_final)
 
 ```{r setup, include=FALSE}
 library(tidyverse)
@@ -15,3 +15,50 @@ sst <- read_csv("../data/SST_update2023.csv")
 nest_boxes <- read_csv("../data/SwiftParrot_nestbox_data/occdist.csv")
 ```
 
+# Problem 1. Research writing
+
+## a. Transparent statistical methods
+In part 1, they used a simple linear regression. In part 2, they used a one-way ANOVA.
+
+## b. More information needed
+
+## c. Suggestions for rewriting
+
+
+# Problem 2. Data visualization
+
+## a. Cleaning and summarizing
+
+## b. Visualize the data
+
+
+# Problem 3. Data analysis
+
+## a. Response variable
+
+## b. Purpose of study
+
+## c. Difference in "seasons"
+
+## d. Table of models
+
+## e. Run the models
+
+## f. Check the diagnostics
+
+## g. Select the best model
+
+## h. Visualize the model predictions
+
+## i. Write a caption for your figure
+
+## j. Calculate model predictions
+
+## k. Interpret your results
+
+
+# Problem 4. Affective and exploratory visualizations
+
+## a. Comparing visualizations
+
+## b. Sharing your affective visualization
