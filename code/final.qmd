@@ -99,7 +99,16 @@ ggplot(sst_clean, aes(
 
 # Problem 3. Data analysis
 
+```{r}
+nest_boxes_clean <- nest_boxes |> 
+  select(box, season, `edge distance`, sp, `box occupant`) |> 
+  rename(edge_distance = `edge distance`) |> 
+  rename(box_occupant = `box occupant`)
+```
+
+
 ## a. Response variable
+The 1s and 0s represent whether a bird occupoed a given nest in a season. A 1 means the nest box was occupied and a 0 means it was not occupied. Each column the 1 or 0 appears in represents either a swift parrot, common starling, or tree martin. There is also a column "e" where 1 means empty and 0 means occupied.
 
 ## b. Purpose of study
 
