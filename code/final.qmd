@@ -1,0 +1,17 @@
+---
+title: "final"
+format: html
+---
+
+[GitHub Repository] (https://github.com/izzy-chang/ENVS-193DS_spring-2025_final)
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(DHARMa)
+library(MuMIn)
+
+sst <- read_csv("../data/SST_update2023.csv")
+nest_boxes <- read_csv("../data/SwiftParrot_nestbox_data/occdist.csv")
+```
+
