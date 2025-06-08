@@ -21,6 +21,9 @@ nest_boxes <- read_csv("../data/SwiftParrot_nestbox_data/occdist.csv")
 In part 1, they used a simple linear regression. In part 2, they used a one-way ANOVA.
 
 ## b. More information needed
+1. Post-hoc comparison: The test in part 2 shows there is a difference in average nitrogen load in multiple groups (urban land, atmospheric deposition, fertilizer, wastewater treatment, and grasslands), but it does not specify which specific sources have higher or lower nitrogen loads. Using a post-hoc test, like Tukey's HSD, would clarify which sources contribute significantly more or less nitrogen to the San Joaquin River Delta.
+
+2. Effect size and confidence intervals: My co-worker only mentioned p-values in their statements, but more is needed to provide context about the relationships. Reporting an effect size (correlation coefficient r in part 1, eta-squared or Cohen's d in part 2) and confidence intervals around the means or correlations would provide this valuable context.
 
 ## c. Suggestions for rewriting
 
