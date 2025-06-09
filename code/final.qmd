@@ -11,6 +11,9 @@ library(lubridate)
 library(DHARMa)
 library(MuMIn)
 library(ggplot2)
+library(janitor)
+library(knitr)
+library(dplyr)
 
 sst <- read_csv("../data/SST_update2023.csv")
 nest_boxes <- read_csv("../data/SwiftParrot_nestbox_data/occdist.csv")
@@ -19,23 +22,27 @@ nest_boxes <- read_csv("../data/SwiftParrot_nestbox_data/occdist.csv")
 # Problem 1. Research writing
 
 ## a. Transparent statistical methods
+
 In part 1, they used a simple linear regression. In part 2, they used a one-way ANOVA.
 
 ## b. More information needed
-1. Post-hoc comparison: The test in part 2 shows there is a difference in average nitrogen load in multiple groups (urban land, atmospheric deposition, fertilizer, wastewater treatment, and grasslands), but it does not specify which specific sources have higher or lower nitrogen loads. Using a post-hoc test, like Tukey's HSD, would clarify which sources contribute significantly more or less nitrogen to the San Joaquin River Delta.
 
-2. Effect size and confidence intervals: My co-worker only mentioned p-values in their statements, but more is needed to provide context about the relationships. Reporting an effect size (correlation coefficient r in part 1, eta-squared or Cohen's d in part 2) and confidence intervals around the means or correlations would provide this valuable context.
+1.  Post-hoc comparison: The test in part 2 shows there is a difference in average nitrogen load in multiple groups (urban land, atmospheric deposition, fertilizer, wastewater treatment, and grasslands), but it does not specify which specific sources have higher or lower nitrogen loads. Using a post-hoc test, like Tukey's HSD, would clarify which sources contribute significantly more or less nitrogen to the San Joaquin River Delta.
+
+2.  Effect size and confidence intervals: My co-worker only mentioned p-values in their statements, but more is needed to provide context about the relationships. Reporting an effect size (correlation coefficient r in part 1, eta-squared or Cohen's d in part 2) and confidence intervals around the means or correlations would provide this valuable context.
 
 ## c. Suggestions for rewriting
-Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta, indicatiing that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = [correlation coefficient], p = 0.03, \$alpha\ = [significance level]).
 
-Part 2: Average nitrogen load (kg/year) differed significantly among sources, suggesting that these sources vary in their contributions to nitrogen runoff (one-way ANOVA: F = [test statistic], p = 0.02, \$alpha\ = [significance level]).
+Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta, indicatiing that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = \[correlation coefficient\], p = 0.03, \$alpha = \[significance level\]).
+
+Part 2: Average nitrogen load (kg/year) differed significantly among sources, suggesting that these sources vary in their contributions to nitrogen runoff (one-way ANOVA: F = \[test statistic\], p = 0.02, \$alpha = \[significance level\]).
 
 **COME BACK TO THIS**
 
 # Problem 2. Data visualization
 
 ## a. Cleaning and summarizing
+
 ```{r}
 sst_clean <- sst |> 
   mutate(
@@ -52,6 +59,7 @@ sst_clean <- sst |>
 
 slice_sample(sst_clean, n = 5)
 ```
+
 ```{r}
 str(sst_clean)
 ```
@@ -96,27 +104,51 @@ ggplot(sst_clean, aes(
 
 ```
 
-
 # Problem 3. Data analysis
 
 ```{r}
 nest_boxes_clean <- nest_boxes |> 
-  select(box, season, `edge distance`, sp, `box occupant`) |> 
+  select(box, season, `edge distance`, sp) |> 
   rename(edge_distance = `edge distance`) |> 
-  rename(box_occupant = `box occupant`)
+mutate(season = as_factor(as.character(season)),
+       season = fct_relevel(season, "2016", "2019"))
+
+str(nest_boxes_clean)
+slice_sample(
+  nest_boxes_clean,
+  n = 10
+)
 ```
 
-
 ## a. Response variable
+
 The 1s and 0s represent whether a bird occupied a given nest in a season. A 1 means the nest box was occupied and a 0 means it was not occupied. Each column the 1 or 0 appears in represents either a Swift Parrot, Common Starling, or Tree Martin. There is also a column "e" where 1 means empty and 0 means occupied.
 
 ## b. Purpose of study
+
 The main difference is that Swift Parrots are the target critically endangered species the study aims to protect, whereas Common Starlings and Tree Martins are non-target competitors that may occupy the nest boxes and affect conservation efforts.
 
 ## c. Difference in "seasons"
+
 The two seasons compared in the study are 2016, when nest boxes were newly deployed, and 2019, after the boxes had been established for three years. These seasons differ in terms of how species responded to the boxes over time. Competitors were more likely to occupy the boxes in 2019, suggesting that long-term box availability may unintentionally favor non-target species.
 
 ## d. Table of models
+
+```{r}
+model_table <- tibble(
+  `Model number` = 1:4,
+  Season = c("", "X", "X", ""),
+  `Distance to Forest Edge` = c("", "X", "", "X"),
+  `Model description` = c(
+    "no predictors (null model)",
+    "all predictors (saturated model)",
+    "seasons only",
+    "distance to forest edge only"
+  )
+)
+
+model_table
+```
 
 ## e. Run the models
 
@@ -131,7 +163,6 @@ The two seasons compared in the study are 2016, when nest boxes were newly deplo
 ## j. Calculate model predictions
 
 ## k. Interpret your results
-
 
 # Problem 4. Affective and exploratory visualizations
 
