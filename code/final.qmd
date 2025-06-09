@@ -164,8 +164,18 @@ model_table
 
 ## k. Interpret your results
 
+
 # Problem 4. Affective and exploratory visualizations
 
 ## a. Comparing visualizations
+The two data visualizations I originally made for Homework 2 are very straightforward and compare two variables each, one being a scatter plot comparing thesis time and screen time and the other being a bar chart comparing type of caffeine consumed and thesis time. My affective visualization includes all of the variables from the data I took, including thesis time, screen time, type of caffeine, sleep time, physical activity, and number of classes. There are not representing in a classic bar chart or scatter plot either, some of the variables are represented as just symbols rather than the actual data.
+
+I do not see too many similarities between my visualizations. The bar chart comparing caffeine types and my affective visualization both use different colors to differentiate between the drinks. The scatter plot and my affective visualization compare screen time and thesis time.
+
+The two visualizations from Homework 2 did not have all of my data inputted, so the patterns do seem to be different from my affective visualization. The bar chart showed that I spent the most time on my thesis when I drink coffee, but the affective visualization does not show this relationship. Although, the original scatter plot seems to have a positive correlation between screen time and thesis time and my affective visualization also seems to show that general relationship.
+
+The feedback I got was to incorporate more variables because I originally was just comparing screen time and thesis time, like in my scatter plot from Homework 2. I took this advice and used little symbols to represent my sleep time, physical activity, and number of classes to add more detail to the visualization. This also made the visualization look more like an image rather than just a bar chart.
+
 
 ## b. Sharing your affective visualization
+![](../data/visualization.jpeg)
