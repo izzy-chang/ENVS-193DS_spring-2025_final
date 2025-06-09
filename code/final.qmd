@@ -134,21 +134,14 @@ The two seasons compared in the study are 2016, when nest boxes were newly deplo
 
 ## d. Table of models
 
-```{r}
-model_table <- tibble(
-  `Model number` = 1:4,
-  Season = c("", "X", "X", ""),
-  `Distance to Forest Edge` = c("", "X", "", "X"),
-  `Model description` = c(
-    "no predictors (null model)",
-    "all predictors (saturated model)",
-    "seasons only",
-    "distance to forest edge only"
-  )
-)
+4 models total:
 
-model_table
-```
+| Model number | Season | Distance to Forest Edge | Model description |
+|:--:|:--:|:--:|----|
+| 0 |  |  | no predictors (null model) |
+| 1 | X | X | all predictors (saturated model) |
+| 2 | X |  | season only |
+| 3 |  | X | distance to forest edge only |
 
 ## e. Run the models
 
@@ -164,10 +157,10 @@ model_table
 
 ## k. Interpret your results
 
-
 # Problem 4. Affective and exploratory visualizations
 
 ## a. Comparing visualizations
+
 The two data visualizations I originally made for Homework 2 are very straightforward and compare two variables each, one being a scatter plot comparing thesis time and screen time and the other being a bar chart comparing type of caffeine consumed and thesis time. My affective visualization includes all of the variables from the data I took, including thesis time, screen time, type of caffeine, sleep time, physical activity, and number of classes. There are not representing in a classic bar chart or scatter plot either, some of the variables are represented as just symbols rather than the actual data.
 
 I do not see too many similarities between my visualizations. The bar chart comparing caffeine types and my affective visualization both use different colors to differentiate between the drinks. The scatter plot and my affective visualization compare screen time and thesis time.
@@ -176,6 +169,6 @@ The two visualizations from Homework 2 did not have all of my data inputted, so 
 
 The feedback I got was to incorporate more variables because I originally was just comparing screen time and thesis time, like in my scatter plot from Homework 2. I took this advice and used little symbols to represent my sleep time, physical activity, and number of classes to add more detail to the visualization. This also made the visualization look more like an image rather than just a bar chart.
 
-
 ## b. Sharing your affective visualization
+
 ![](../data/visualization.jpeg)
