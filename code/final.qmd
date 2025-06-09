@@ -108,11 +108,13 @@ nest_boxes_clean <- nest_boxes |>
 
 
 ## a. Response variable
-The 1s and 0s represent whether a bird occupoed a given nest in a season. A 1 means the nest box was occupied and a 0 means it was not occupied. Each column the 1 or 0 appears in represents either a swift parrot, common starling, or tree martin. There is also a column "e" where 1 means empty and 0 means occupied.
+The 1s and 0s represent whether a bird occupied a given nest in a season. A 1 means the nest box was occupied and a 0 means it was not occupied. Each column the 1 or 0 appears in represents either a Swift Parrot, Common Starling, or Tree Martin. There is also a column "e" where 1 means empty and 0 means occupied.
 
 ## b. Purpose of study
+The main difference is that Swift Parrots are the target critically endangered species the study aims to protect, whereas Common Starlings and Tree Martins are non-target competitors that may occupy the nest boxes and affect conservation efforts.
 
 ## c. Difference in "seasons"
+The two seasons compared in the study are 2016, when nest boxes were newly deployed, and 2019, after the boxes had been established for three years. These seasons differ in terms of how species responded to the boxes over time. Competitors were more likely to occupy the boxes in 2019, suggesting that long-term box availability may unintentionally favor non-target species.
 
 ## d. Table of models
 
