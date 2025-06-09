@@ -166,20 +166,6 @@ model3 <- glm(sp ~ edge_distance,
               data = nest_boxes_clean)
 ```
 
-
-```{r model selection}
-AICc(model0,
-     model1,
-     model2,
-     model3) |> 
-  arrange(AICc)
-```
-```{r model summary}
-summary(model1)
-
-```
-
-
 ## f. Check the diagnostics
 ```{r}
 # Model 0 diagnostics
@@ -204,6 +190,17 @@ plot(sim3)
 
 
 ## g. Select the best model
+```{r}
+AICc(model0,
+     model1,
+     model2,
+     model3) |> 
+  arrange(AICc)
+```
+```{r model summary}
+summary(model1)
+```
+The best model as determined by Akaike's Information Criterion (AIC) was Model 1, or the saturated model with both season and edge distance as predictors.
 
 ## h. Visualize the model predictions
 
