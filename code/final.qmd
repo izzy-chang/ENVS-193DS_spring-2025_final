@@ -137,15 +137,71 @@ The two seasons compared in the study are 2016, when nest boxes were newly deplo
 4 models total:
 
 | Model number | Season | Distance to Forest Edge | Model description |
-|:--:|:--:|:--:|----|
+|:--------------:|:--------------:|:---------------:|-----------------------|
 | 0 |  |  | no predictors (null model) |
 | 1 | X | X | all predictors (saturated model) |
 | 2 | X |  | season only |
 | 3 |  | X | distance to forest edge only |
 
 ## e. Run the models
+```{r model fitting}
+# model 0: null model
+model0 <- glm(sp ~ 1,
+              family = binomial,
+              data = nest_boxes_clean)
+
+# model 1: all predictors
+model1 <- glm(sp ~ season + edge_distance,
+              family = binomial,
+              data = nest_boxes_clean)
+
+# model 2: season only
+model2 <- glm(sp ~ season,
+              family = binomial,
+              data = nest_boxes_clean)
+
+# model 3: edge distance only
+model3 <- glm(sp ~ edge_distance,
+              family = binomial,
+              data = nest_boxes_clean)
+```
+
+
+```{r model selection}
+AICc(model0,
+     model1,
+     model2,
+     model3) |> 
+  arrange(AICc)
+```
+```{r model summary}
+summary(model1)
+
+```
+
 
 ## f. Check the diagnostics
+```{r}
+# Model 0 diagnostics
+sim0 <- simulateResiduals(model0)
+plot(sim0)
+```
+```{r}
+# Model 1 diagnostics
+sim1 <- simulateResiduals(model1)
+plot(sim1)
+```
+```{r}
+# Model 2 diagnostics
+sim2 <- simulateResiduals(model2)
+plot(sim2)
+```
+```{r}
+# Model 3 diagnostics
+sim3 <- simulateResiduals(model3)
+plot(sim3)
+```
+
 
 ## g. Select the best model
 
