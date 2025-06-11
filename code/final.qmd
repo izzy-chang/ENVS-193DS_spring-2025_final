@@ -11,6 +11,8 @@ toc-floating: true
 
 (https://github.com/izzy-chang/ENVS-193DS_spring-2025_final)
 
+## Set Up
+
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(lubridate)
