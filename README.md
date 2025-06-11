@@ -30,4 +30,4 @@
 
 The complete analysis is available as an HTML report here:
 
-[View Final Analysis](https://github.com/izzy-chang/ENVS-193DS_spring-2025_final/final.html)
+[View Final Analysis](https://izzy-chang.github.io/ENVS-193DS_spring-2025_final/code/final.html)

@@ -1,9 +1,15 @@
 ---
-title: "Final"
+title: "ENV S 193DS - Final"
+author: "Izzy Chang"
+date: "2025-05-23"
 format: html
+toc: true
+toc-floating: true
 ---
 
-\[GitHub Repository\] (https://github.com/izzy-chang/ENVS-193DS_spring-2025_final)
+## GitHub Repository:
+
+(https://github.com/izzy-chang/ENVS-193DS_spring-2025_final)
 
 ```{r setup, include=FALSE}
 library(tidyverse)
@@ -35,10 +41,9 @@ In part 1, they most likely used a Pearson's correlation because they are seeing
 
 ## c. Suggestions for rewriting
 
-Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta (n = [sample size]), indicating that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = \[correlation coefficient\], p = 0.03, \$alpha\= \[significance level\]).
+Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta (n = \[sample size\]), indicating that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = \[correlation coefficient\], p = 0.03, \$alpha= \[significance level\]).
 
-Part 2: Average nitrogen load (kg/year) differed significantly among sources (n = [sample size for each source]), suggesting that these sources vary in their contributions to nitrogen runoff (one-way ANOVA: F = \[test statistic\], df = [degrees of freedom], p = 0.02, \$alpha\.
-
+Part 2: Average nitrogen load (kg/year) differed significantly among sources (n = \[sample size for each source\]), suggesting that these sources vary in their contributions to nitrogen runoff (one-way ANOVA: F = \[test statistic\], df = \[degrees of freedom\], p = 0.02, \$alpha.
 
 # Problem 2. Data visualization
 
@@ -129,7 +134,7 @@ ggplot(sst_clean, aes( # set up plot
 # Problem 3. Data analysis
 
 ```{r}
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 #| results: 'hide'
