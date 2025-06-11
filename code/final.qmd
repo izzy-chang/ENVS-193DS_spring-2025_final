@@ -15,6 +15,7 @@ library(janitor)
 library(knitr)
 library(dplyr)
 library(ggeffects)
+library(gtsummary)
 
 sst <- read_csv("../data/SST_update2023.csv")
 nest_boxes <- read_csv("../data/SwiftParrot_nestbox_data/occdist.csv")
@@ -34,9 +35,9 @@ In part 1, they used a simple linear regression. In part 2, they used a one-way 
 
 ## c. Suggestions for rewriting
 
-Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta, indicatiing that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = \[correlation coefficient\], p = 0.03, \$alpha\ = \[significance level\]).
+Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta, indicatiing that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = \[correlation coefficient\], p = 0.03, \$alpha = \[significance level\]).
 
-Part 2: Average nitrogen load (kg/year) differed significantly among sources, suggesting that these sources vary in their contributions to nitrogen runoff (one-way ANOVA: F = \[test statistic\], p = 0.02, \$alpha\ = \[significance level\]).
+Part 2: Average nitrogen load (kg/year) differed significantly among sources, suggesting that these sources vary in their contributions to nitrogen runoff (one-way ANOVA: F = \[test statistic\], p = 0.02, \$alpha = \[significance level\]).
 
 **COME BACK TO THIS**
 
@@ -138,13 +139,14 @@ The two seasons compared in the study are 2016, when nest boxes were newly deplo
 4 models total:
 
 | Model number | Season | Distance to Forest Edge | Model description |
-|:--------------:|:--------------:|:---------------:|-----------------------|
+|:---------------:|:---------------:|:---------------:|----------------------|
 | 0 |  |  | no predictors (null model) |
 | 1 | X | X | all predictors (saturated model) |
 | 2 | X |  | season only |
 | 3 |  | X | distance to forest edge only |
 
 ## e. Run the models
+
 ```{r model fitting}
 # model 0: null model
 model0 <- glm(sp ~ 1,
@@ -168,24 +170,28 @@ model3 <- glm(sp ~ edge_distance,
 ```
 
 ## f. Check the diagnostics
+
 ```{r}
 # Model 0 diagnostics
 plot(
   simulateResiduals(model0)
 )
 ```
+
 ```{r}
 # Model 1 diagnostics
 plot(
   simulateResiduals(model1)
 )
 ```
+
 ```{r}
 # Model 2 diagnostics
 plot(
   simulateResiduals(model2)
 )
 ```
+
 ```{r}
 # Model 3 diagnostics
 plot(
@@ -193,8 +199,8 @@ plot(
 )
 ```
 
-
 ## g. Select the best model
+
 ```{r}
 AICc(model0,
      model1,
@@ -202,45 +208,62 @@ AICc(model0,
      model3) |> 
   arrange(AICc)
 ```
+
 ```{r model summary}
 summary(model1)
+
+gtsummary::tbl_regression(model1,
+                          exponentiate = TRUE)
+
+ggpredict(model1,
+          terms = "edge_distance [20]")
 ```
+
 The best model as determined by Akaike's Information Criterion (AIC) was Model 1, or the saturated model with both season and edge distance as predictors.
 
 ## h. Visualize the model predictions
-```{r}
-model1_predictions <- ggpredict(
-  model1,
-  terms = c("edge_distance [all]", "season")
-) |> 
-  rename(edge_distance = x,
-         season = group)
-```
 
 ```{r}
-ggplot(data = nest_boxes_clean,
+model1_preds <- ggpredict(model1,
+                       terms = c("edge_distance [7:1072 by=10]", "season"))
+
+ggplot(nest_boxes_clean,
        aes(x = edge_distance,
-           y = sp)) +
-       geom_jitter(
-        height = 0.05,
-        width = 0,
-        alpha = 0.3) + 
-  geom_ribbon(data = model1_predictions,
+           y = sp)) + 
+  geom_point(size = 3,
+             alpha = 0.2) +
+    geom_line(data = model1_preds,
+            aes(x = x,
+                 y = predicted,
+                color = group),
+            size = 1) +
+  geom_ribbon(data = model1_preds,
               aes(x = x,
+                  y = predicted,
                   ymin = conf.low,
                   ymax = conf.high,
-                  fill = season),
-              alpha = 0.2) +
-geom_line(data = model1_predictions,
-          aes(y = predicted, 
-              color = season),
-          size = 1)
+                  fill = group),
+              alpha = 0.4) + 
+  scale_y_continuous(limits = c(0, 1),
+                     breaks = c(0, 1)) + 
+  scale_color_manual(values = c("2016" = "orchid", "2019" = "dodgerblue")) + 
+  scale_fill_manual(values = c("2016" = "orchid", "2019" = "dodgerblue")) + 
+  labs(x = "Distance from Forest Edge (m)",
+       y = "Probability of Swift Parrot Nest Box Occupancy",
+       color = "Season",
+       fill = "Season") 
 ```
-
 
 ## i. Write a caption for your figure
 
+**Figure 1:** *Model predictions of Swift Parrot nest box occupancy by distance from forest edge across two seasons.* This figure shows model predictions with 95% confidence intervals (shaded ribbons) overlaid with observed data points (dots) for the years 2016 (pink) and 2019 (blue). The x-axis represents the distance from the forest edge in meters, and the y-axis shows the probability of nest box occupancy by Swift Parrots. Predictions were generated from a generalized linear model including season and distance from forest edge as predictors. Data is from *Stojanovic, Dejan et al. (2021). Do nest boxes breed the target species or its competitors? A case study of a critically endangered bird [Dataset]. Dryad. https://doi.org/10.5061/dryad.83bk3j9sb*
+
 ## j. Calculate model predictions
+```{r}
+ggpredict(model1,
+          terms = c("edge_distance [0, 900]", "season"))
+```
+
 
 ## k. Interpret your results
 
