@@ -14,6 +14,7 @@ library(ggplot2)
 library(janitor)
 library(knitr)
 library(dplyr)
+library(ggeffects)
 
 sst <- read_csv("../data/SST_update2023.csv")
 nest_boxes <- read_csv("../data/SwiftParrot_nestbox_data/occdist.csv")
@@ -33,9 +34,9 @@ In part 1, they used a simple linear regression. In part 2, they used a one-way 
 
 ## c. Suggestions for rewriting
 
-Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta, indicatiing that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = \[correlation coefficient\], p = 0.03, \$alpha = \[significance level\]).
+Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta, indicatiing that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = \[correlation coefficient\], p = 0.03, \$alpha\ = \[significance level\]).
 
-Part 2: Average nitrogen load (kg/year) differed significantly among sources, suggesting that these sources vary in their contributions to nitrogen runoff (one-way ANOVA: F = \[test statistic\], p = 0.02, \$alpha = \[significance level\]).
+Part 2: Average nitrogen load (kg/year) differed significantly among sources, suggesting that these sources vary in their contributions to nitrogen runoff (one-way ANOVA: F = \[test statistic\], p = 0.02, \$alpha\ = \[significance level\]).
 
 **COME BACK TO THIS**
 
@@ -147,45 +148,49 @@ The two seasons compared in the study are 2016, when nest boxes were newly deplo
 ```{r model fitting}
 # model 0: null model
 model0 <- glm(sp ~ 1,
-              family = binomial,
+              family = "binomial",
               data = nest_boxes_clean)
 
 # model 1: all predictors
 model1 <- glm(sp ~ season + edge_distance,
-              family = binomial,
+              family = "binomial",
               data = nest_boxes_clean)
 
 # model 2: season only
 model2 <- glm(sp ~ season,
-              family = binomial,
+              family = "binomial",
               data = nest_boxes_clean)
 
 # model 3: edge distance only
 model3 <- glm(sp ~ edge_distance,
-              family = binomial,
+              family = "binomial",
               data = nest_boxes_clean)
 ```
 
 ## f. Check the diagnostics
 ```{r}
 # Model 0 diagnostics
-sim0 <- simulateResiduals(model0)
-plot(sim0)
+plot(
+  simulateResiduals(model0)
+)
 ```
 ```{r}
 # Model 1 diagnostics
-sim1 <- simulateResiduals(model1)
-plot(sim1)
+plot(
+  simulateResiduals(model1)
+)
 ```
 ```{r}
 # Model 2 diagnostics
-sim2 <- simulateResiduals(model2)
-plot(sim2)
+plot(
+  simulateResiduals(model2)
+)
 ```
 ```{r}
 # Model 3 diagnostics
-sim3 <- simulateResiduals(model3)
-plot(sim3)
+plot(
+  simulateResiduals(model3)
+)
 ```
 
 
@@ -203,6 +208,35 @@ summary(model1)
 The best model as determined by Akaike's Information Criterion (AIC) was Model 1, or the saturated model with both season and edge distance as predictors.
 
 ## h. Visualize the model predictions
+```{r}
+model1_predictions <- ggpredict(
+  model1,
+  terms = c("edge_distance [all]", "season")
+) |> 
+  rename(edge_distance = x,
+         season = group)
+```
+
+```{r}
+ggplot(data = nest_boxes_clean,
+       aes(x = edge_distance,
+           y = sp)) +
+       geom_jitter(
+        height = 0.05,
+        width = 0,
+        alpha = 0.3) + 
+  geom_ribbon(data = model1_predictions,
+              aes(x = x,
+                  ymin = conf.low,
+                  ymax = conf.high,
+                  fill = season),
+              alpha = 0.2) +
+geom_line(data = model1_predictions,
+          aes(y = predicted, 
+              color = season),
+          size = 1)
+```
+
 
 ## i. Write a caption for your figure
 
