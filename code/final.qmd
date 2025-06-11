@@ -234,6 +234,13 @@ plot(
 ```
 
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+show_col_types = FALSE # hide the columns and codes and messages
+
 # Model 3 diagnostics
 plot(
   simulateResiduals(model3)
@@ -304,7 +311,10 @@ ggplot(nest_boxes_clean, # begin with clean data
   labs(x = "Distance from Forest Edge (m)",
        y = "Probability of Swift Parrot Nest Box Occupancy",
        color = "Season",
-       fill = "Season") # add axis labels and titles
+       fill = "Season") + # add axis labels and titles
+    theme(panel.background = element_rect(fill = "white", color = NA), # white background for panel
+    panel.grid.major = element_blank(), # remove major gridlines
+    panel.grid.minor = element_blank()) # remove minor gridlines
 ```
 
 ## i. Write a caption for your figure
