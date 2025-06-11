@@ -1,5 +1,5 @@
 ---
-title: "final"
+title: "Final"
 format: html
 ---
 
@@ -35,7 +35,7 @@ In part 1, they used a simple linear regression. In part 2, they used a one-way 
 
 ## c. Suggestions for rewriting
 
-Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta, indicatiing that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = \[correlation coefficient\], p = 0.03, \$alpha = \[significance level\]).
+Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta, indicating that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = \[correlation coefficient\], p = 0.03, \$alpha = \[significance level\]).
 
 Part 2: Average nitrogen load (kg/year) differed significantly among sources, suggesting that these sources vary in their contributions to nitrogen runoff (one-way ANOVA: F = \[test statistic\], p = 0.02, \$alpha = \[significance level\]).
 
@@ -214,9 +214,6 @@ summary(model1)
 
 gtsummary::tbl_regression(model1,
                           exponentiate = TRUE)
-
-ggpredict(model1,
-          terms = "edge_distance [20]")
 ```
 
 The best model as determined by Akaike's Information Criterion (AIC) was Model 1, or the saturated model with both season and edge distance as predictors.
@@ -264,8 +261,8 @@ ggpredict(model1,
           terms = c("edge_distance [0, 900]", "season"))
 ```
 
-
 ## k. Interpret your results
+The predicted probability of Swift Parrot nest box occupancy is higher at the forest edge (0m) compared to farther away (900m) in both 2016 and 2019, with occupancy dropping substantially as distance increases. Specifically, occupancy near the forest was estimated at 48% in 2016 and 30% in 2019, while farther from the edge it dropped to 12% and 6%, respectively. This suggests a clear negative relationship between distance from the forest edge and nest box occupancy, consistent across seasons. Biologically, this pattern likely reflects the Swift Parrot's dependence on forest-edge habitats for nesting, where resources such as food, shelter, and suitable nesting sites are more abundant or accessible. The difference between seasons could be influenced by Common Starlings or Tree Martins taking over the nest boxes. 
 
 # Problem 4. Affective and exploratory visualizations
 
