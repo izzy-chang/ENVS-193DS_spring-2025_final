@@ -25,7 +25,7 @@ nest_boxes <- read_csv("../data/SwiftParrot_nestbox_data/occdist.csv")
 
 ## a. Transparent statistical methods
 
-In part 1, they used a simple linear regression. In part 2, they used a one-way ANOVA.
+In part 1, they most likely used a Pearson's correlation because they are seeing how two variables relate to each other. In part 2, they likely used a one-way ANOVA because they are comparing multiple categorical groups' effects on one variable.
 
 ## b. More information needed
 
@@ -35,11 +35,10 @@ In part 1, they used a simple linear regression. In part 2, they used a one-way 
 
 ## c. Suggestions for rewriting
 
-Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta, indicating that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = \[correlation coefficient\], p = 0.03, \$alpha = \[significance level\]).
+Part 1: We found significant negative correlation between distance from the headwater (km) and annual total nitrogen load (kg/year) in the San Joaquin River Delta (n = [sample size]), indicating that nitrogen loads tend to decrease farther from the headwater (Pearson's correlation test: r = \[correlation coefficient\], p = 0.03, \$alpha\= \[significance level\]).
 
-Part 2: Average nitrogen load (kg/year) differed significantly among sources, suggesting that these sources vary in their contributions to nitrogen runoff (one-way ANOVA: F = \[test statistic\], p = 0.02, \$alpha = \[significance level\]).
+Part 2: Average nitrogen load (kg/year) differed significantly among sources (n = [sample size for each source]), suggesting that these sources vary in their contributions to nitrogen runoff (one-way ANOVA: F = \[test statistic\], df = [degrees of freedom], p = 0.02, \$alpha\.
 
-**COME BACK TO THIS**
 
 # Problem 2. Data visualization
 
