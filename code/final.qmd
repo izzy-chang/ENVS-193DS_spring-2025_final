@@ -46,62 +46,83 @@ Part 2: Average nitrogen load (kg/year) differed significantly among sources, su
 ## a. Cleaning and summarizing
 
 ```{r}
-sst_clean <- sst |> 
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+show_col_types = FALSE # hide the columns and codes and messages
+
+sst_clean <- sst |> # start with original data 
   mutate(
-    date = ymd(date),
-    year = year(date),
-    month = month(date, label = TRUE, abbr = TRUE)
+    date = ymd(date), # convert 'date' column to Date format using year-month-day format
+    year = year(date), # Extract the year as a numeric value from the 'date' column 
+    month = month(date, label = TRUE, abbr = TRUE) # extract the month as a labeled factor
   ) |> 
-  filter(year >= 2018, year <= 2023) |> 
-  group_by(year, month) |> 
+  filter(year >= 2018, year <= 2023) |> # keep only rows where the year is between 2018 and 2023
+  group_by(year, month) |> # Group the data by year and month
   summarize(
-    mean_monthly_sst = round(mean(temp, na.rm = TRUE), 1),
-    .groups = "drop"
+    mean_monthly_sst = round(mean(temp, na.rm = TRUE), 1),# Calculate the mean sea surface temperature (SST) per month/year
+    .groups = "drop" # Ungroup after summarizing to avoid grouped data downstream
   )
 
+# Randomly select 5 rows from the summarized dataset 'sst_clean' to view a sample
 slice_sample(sst_clean, n = 5)
 ```
 
 ```{r}
-str(sst_clean)
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+show_col_types = FALSE # hide the columns and codes and messages
+
+str(sst_clean) # show structure
 ```
 
 ## b. Visualize the data
 
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+show_col_types = FALSE # hide the columns and codes and messages
 
 color_palette <- setNames(
-  colorRampPalette(c("lightgreen", "darkgreen"))(6),
-  as.character(2018:2023)
+  colorRampPalette(c("lightgreen", "darkgreen"))(6),# Generate 6 gradient colors between light green and dark green
+  as.character(2018:2023) # Name each color according to the corresponding year
 )
 
 
-ggplot(sst_clean, aes(
-  x = month,
-  y = mean_monthly_sst, 
-  group = factor(year),
+ggplot(sst_clean, aes( # set up plot
+  x = month, # have month on x-axis
+  y = mean_monthly_sst, # have mean monthly sea surface temperature on y-axis
+  group = factor(year), # each year will get a separate line and color
   color = factor(year)
 )) + 
-  geom_line(size = .5) + 
-  geom_point(size = 2) +
+  geom_line(size = .5) + # add thin lines for each year's data
+  geom_point(size = 2) + # add visible points on top of the lines
   scale_color_manual(
-    values = color_palette,
-    name = "Year"
+    values = color_palette, # use the green gradient
+    name = "Year" # title for the legend
   ) + 
-  labs(
+  labs( # write axis labels and legend title
     x = "Month",
-    y = "Mean Monthy Sea Surface Temperature (°C)",
+    y = "Mean Monthly Sea Surface Temperature (°C)",
     color = "Year"
   ) + 
-  theme_minimal() + 
+  theme_minimal() + # use minimal theme
   theme(
-    legend.position = c(0.1, 0.70),
-    legend.background = element_rect(fill = "white", color = NA),
-    panel.border = element_rect(color = "black", fill = NA, size = .5),
-    panel.background = element_rect(fill = "white", color = NA),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    axis.ticks = element_line(color = "black", size = 0.5)
+    legend.position = c(0.1, 0.70), # move the legend inside the plot area
+    legend.background = element_rect(fill = "white", color = NA), # white background for legend
+    panel.border = element_rect(color = "black", fill = NA, size = .5), # black border around plot
+    panel.background = element_rect(fill = "white", color = NA), # white background for panel
+    panel.grid.major = element_blank(), # remove major gridlines
+    panel.grid.minor = element_blank(), # remove minor gridlines
+    axis.ticks = element_line(color = "black", size = 0.5) # add axis ticks
 )
 
 ```
@@ -109,17 +130,24 @@ ggplot(sst_clean, aes(
 # Problem 3. Data analysis
 
 ```{r}
-nest_boxes_clean <- nest_boxes |> 
-  select(box, season, `edge distance`, sp) |> 
-  rename(edge_distance = `edge distance`) |> 
-mutate(season = as_factor(as.character(season)),
-       season = fct_relevel(season, "2016", "2019"))
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
 
-str(nest_boxes_clean)
+show_col_types = FALSE # hide the columns and codes and messages
+
+nest_boxes_clean <- nest_boxes |> 
+  select(box, season, `edge distance`, sp) |> # select relevant columns
+  rename(edge_distance = `edge distance`) |> # rename for easier coding
+mutate(season = as_factor(as.character(season)), # ensure season is a categorical variable
+       season = fct_relevel(season, "2016", "2019")) # set the order of factor levels
+
+str(nest_boxes_clean) # display cleaned data set
 slice_sample(
   nest_boxes_clean,
   n = 10
-)
+) # random 10 rows for sample
 ```
 
 ## a. Response variable
@@ -139,7 +167,7 @@ The two seasons compared in the study are 2016, when nest boxes were newly deplo
 4 models total:
 
 | Model number | Season | Distance to Forest Edge | Model description |
-|:---------------:|:---------------:|:---------------:|----------------------|
+|:--:|:--:|:--:|----|
 | 0 |  |  | no predictors (null model) |
 | 1 | X | X | all predictors (saturated model) |
 | 2 | X |  | season only |
@@ -148,6 +176,13 @@ The two seasons compared in the study are 2016, when nest boxes were newly deplo
 ## e. Run the models
 
 ```{r model fitting}
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+show_col_types = FALSE # hide the columns and codes and messages
+
 # model 0: null model
 model0 <- glm(sp ~ 1,
               family = "binomial",
@@ -202,18 +237,33 @@ plot(
 ## g. Select the best model
 
 ```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+show_col_types = FALSE # hide the columns and codes and messages
+
+# use AICc to select the best model
 AICc(model0,
      model1,
      model2,
      model3) |> 
-  arrange(AICc)
+  arrange(AICc) # arrange from best to worst
 ```
 
 ```{r model summary}
+#| echo: true
+#| message: false
+#| warning: false
+#| results: 'hide'
+
+show_col_types = FALSE # hide the columns and codes and messages
+
 summary(model1)
 
 gtsummary::tbl_regression(model1,
-                          exponentiate = TRUE)
+                          exponentiate = TRUE) # exponentiate the estimates
 ```
 
 The best model as determined by Akaike's Information Criterion (AIC) was Model 1, or the saturated model with both season and edge distance as predictors.
@@ -222,47 +272,49 @@ The best model as determined by Akaike's Information Criterion (AIC) was Model 1
 
 ```{r}
 model1_preds <- ggpredict(model1,
-                       terms = c("edge_distance [7:1072 by=10]", "season"))
+                       terms = c("edge_distance [7:1072 by=10]", "season")) # make predictions of occupancy probability at every 10 meters from 7 to 1072 
 
-ggplot(nest_boxes_clean,
-       aes(x = edge_distance,
-           y = sp)) + 
+ggplot(nest_boxes_clean, # begin with clean data
+       aes(x = edge_distance, # set edge distance on x-axis
+           y = sp)) + # set occupancy on y-axis
   geom_point(size = 3,
-             alpha = 0.2) +
+             alpha = 0.2) + # add semi-transparent data points
     geom_line(data = model1_preds,
             aes(x = x,
                  y = predicted,
                 color = group),
-            size = 1) +
+            size = 1) + # add prediction lines, colored by season
   geom_ribbon(data = model1_preds,
               aes(x = x,
                   y = predicted,
                   ymin = conf.low,
                   ymax = conf.high,
                   fill = group),
-              alpha = 0.4) + 
+              alpha = 0.4) + # add shaded ribbons representing 95% confidence intervals
   scale_y_continuous(limits = c(0, 1),
-                     breaks = c(0, 1)) + 
+                     breaks = c(0, 1)) + # set y-axis to valid probability range and show only 0 and 1 labels
   scale_color_manual(values = c("2016" = "orchid", "2019" = "dodgerblue")) + 
-  scale_fill_manual(values = c("2016" = "orchid", "2019" = "dodgerblue")) + 
+  scale_fill_manual(values = c("2016" = "orchid", "2019" = "dodgerblue")) + # set colors for lines and ribbons
   labs(x = "Distance from Forest Edge (m)",
        y = "Probability of Swift Parrot Nest Box Occupancy",
        color = "Season",
-       fill = "Season") 
+       fill = "Season") # add axis labels and titles
 ```
 
 ## i. Write a caption for your figure
 
-**Figure 1:** *Model predictions of Swift Parrot nest box occupancy by distance from forest edge across two seasons.* This figure shows model predictions with 95% confidence intervals (shaded ribbons) overlaid with observed data points (dots) for the years 2016 (pink) and 2019 (blue). The x-axis represents the distance from the forest edge in meters, and the y-axis shows the probability of nest box occupancy by Swift Parrots. Predictions were generated from a generalized linear model including season and distance from forest edge as predictors. Data is from *Stojanovic, Dejan et al. (2021). Do nest boxes breed the target species or its competitors? A case study of a critically endangered bird [Dataset]. Dryad. https://doi.org/10.5061/dryad.83bk3j9sb*
+**Figure 1:** *Model predictions of Swift Parrot nest box occupancy by distance from forest edge across two seasons.* This figure shows model predictions with 95% confidence intervals (shaded ribbons) overlaid with observed data points (dots) for the years 2016 (pink) and 2019 (blue). The x-axis represents the distance from the forest edge in meters, and the y-axis shows the probability of nest box occupancy by Swift Parrots. Predictions were generated from a generalized linear model including season and distance from forest edge as predictors. Data is from *Stojanovic, Dejan et al. (2021). Do nest boxes breed the target species or its competitors? A case study of a critically endangered bird \[Dataset\]. Dryad. https://doi.org/10.5061/dryad.83bk3j9sb*
 
 ## j. Calculate model predictions
+
 ```{r}
 ggpredict(model1,
           terms = c("edge_distance [0, 900]", "season"))
 ```
 
 ## k. Interpret your results
-The predicted probability of Swift Parrot nest box occupancy is higher at the forest edge (0m) compared to farther away (900m) in both 2016 and 2019, with occupancy dropping substantially as distance increases. Specifically, occupancy near the forest was estimated at 48% in 2016 and 30% in 2019, while farther from the edge it dropped to 12% and 6%, respectively. This suggests a clear negative relationship between distance from the forest edge and nest box occupancy, consistent across seasons. Biologically, this pattern likely reflects the Swift Parrot's dependence on forest-edge habitats for nesting, where resources such as food, shelter, and suitable nesting sites are more abundant or accessible. The difference between seasons could be influenced by Common Starlings or Tree Martins taking over the nest boxes. 
+
+The predicted probability of Swift Parrot nest box occupancy is higher at the forest edge (0m) compared to farther away (900m) in both 2016 and 2019, with occupancy dropping substantially as distance increases. Specifically, occupancy near the forest was estimated at 48% in 2016 and 30% in 2019, while farther from the edge it dropped to 12% and 6%, respectively. This suggests a clear negative relationship between distance from the forest edge and nest box occupancy, consistent across seasons. Biologically, this pattern likely reflects the Swift Parrot's dependence on forest-edge habitats for nesting, where resources such as food, shelter, and suitable nesting sites are more abundant or accessible. The difference between seasons could be influenced by Common Starlings or Tree Martins taking over the nest boxes.
 
 # Problem 4. Affective and exploratory visualizations
 
